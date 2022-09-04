@@ -1,4 +1,5 @@
 import 'package:another_flushbar/flushbar.dart';
+import 'package:e_commerce/base/show_flushbar.dart';
 import 'package:e_commerce/features/home/data/repository/popular_product_repo.dart';
 import 'package:e_commerce/features/cart/domain/models/cart_model.dart';
 import 'package:e_commerce/features/cart/presentation/cart_controller.dart';
@@ -45,26 +46,15 @@ class PopularProductController extends ChangeNotifier {
 
   int checkQuantity(int quantity, BuildContext context) {
     if ((quantity + _inCartItems) > 15) {
-      Flushbar(
-        title: "Item Count",
-        backgroundColor: AppColors.mainColor,
-        margin: const EdgeInsets.all(8),
-        borderRadius: BorderRadius.circular(8),
-        flushbarPosition: FlushbarPosition.TOP,
-        message: "You can't add more",
-        duration: const Duration(seconds: 3),
-      ).show(context);
+      showCustomSnackBar(
+          context: context, message: "You can't add more", title: "Item Count");
+
       return 15;
     } else if ((quantity + _inCartItems) < 0) {
-      Flushbar(
-        title: "Item Count",
-        backgroundColor: AppColors.mainColor,
-        margin: const EdgeInsets.all(8),
-        borderRadius: BorderRadius.circular(8),
-        flushbarPosition: FlushbarPosition.TOP,
-        message: "You can't reduce more",
-        duration: const Duration(seconds: 3),
-      ).show(context);
+      showCustomSnackBar(
+          context: context,
+          title: "Item Count",
+          message: "You can't reduce more");
 
       return 0;
     } else {

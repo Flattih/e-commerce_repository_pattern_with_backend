@@ -5,6 +5,7 @@ import 'package:e_commerce/features/home/presentation/reccomended_food_detail.da
 import 'package:e_commerce/utils/all_providers.dart';
 
 import 'package:e_commerce/utils/colors.dart';
+import 'package:e_commerce/utils/dimensions.dart';
 
 import 'package:e_commerce/widgets/icon_and_text_widget.dart';
 import 'package:e_commerce/widgets/big_text.dart';
@@ -25,7 +26,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
   PageController pageController = PageController(viewportFraction: 0.85);
   var _currentPageValue = 0.0;
   final double _scaleFactor = 0.8;
-  final double _height = 220;
+  final double _height = Dimensions.pageViewContainer;
   @override
   void initState() {
     super.initState();
@@ -50,7 +51,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
           builder: (context, ref, child) {
             return ref.watch(controllerPopularProduct).isLoaded
                 ? SizedBox(
-                    height: 320,
+                    height: Dimensions.pageView,
                     child: PageView.builder(
                       controller: pageController,
                       itemCount: ref
@@ -92,14 +93,14 @@ class _FoodPageBodyState extends State<FoodPageBody> {
             );
           },
         ),
-        const SizedBox(height: 30),
+        SizedBox(height: Dimensions.height30),
         Container(
-          margin: const EdgeInsets.only(left: 30),
+          margin: EdgeInsets.only(left: Dimensions.width30),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               BigText(text: "Recommended"),
-              const SizedBox(width: 10),
+              SizedBox(width: Dimensions.width10),
               Container(
                 margin: const EdgeInsets.only(bottom: 3),
                 child: BigText(
@@ -107,7 +108,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                   color: Colors.black26,
                 ),
               ),
-              const SizedBox(width: 10),
+              SizedBox(width: Dimensions.width10),
               Container(
                 margin: const EdgeInsets.only(bottom: 2),
                 child: SmallText(text: "Food pairing"),
@@ -139,13 +140,13 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                           return RecommendedFoodDetail(index: index);
                         })),
                         child: Container(
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 5, horizontal: 20),
+                          margin: EdgeInsets.symmetric(
+                              vertical: 5, horizontal: Dimensions.width20),
                           child: Row(
                             children: [
                               Container(
-                                width: 120,
-                                height: 120,
+                                width: Dimensions.listViewImgSize,
+                                height: Dimensions.listViewImgSize,
                                 decoration: BoxDecoration(
                                     image: DecorationImage(
                                         image: NetworkImage(AppConstants
@@ -162,9 +163,9 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                               ),
                               Expanded(
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  height: 100,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: Dimensions.width10),
+                                  height: Dimensions.listViewTextContSize,
                                   decoration: const BoxDecoration(
                                       borderRadius: BorderRadius.only(
                                         topRight: Radius.circular(20),
@@ -183,11 +184,11 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                                                     controllerRecommendedProduct)
                                                 .recommendedProductList[index]
                                                 .name!),
-                                        const SizedBox(height: 10),
+                                        SizedBox(height: Dimensions.height10),
                                         SmallText(
                                             text:
                                                 "With chinese characteristics"),
-                                        const SizedBox(height: 10),
+                                        SizedBox(height: Dimensions.height10),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
@@ -277,8 +278,8 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                 );
               },
               child: Container(
-                height: 220,
-                margin: const EdgeInsets.symmetric(horizontal: 10),
+                height: Dimensions.pageViewContainer,
+                margin: EdgeInsets.symmetric(horizontal: Dimensions.width10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
                   image: DecorationImage(
@@ -293,9 +294,13 @@ class _FoodPageBodyState extends State<FoodPageBody> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              padding: const EdgeInsets.only(top: 10, right: 15, left: 15),
-              height: 120,
-              margin: const EdgeInsets.only(left: 30, right: 30, bottom: 30),
+              padding: EdgeInsets.only(
+                  top: Dimensions.height15, right: 15, left: 15),
+              height: Dimensions.pageViewTextContainer,
+              margin: EdgeInsets.only(
+                  left: Dimensions.width30,
+                  right: Dimensions.width30,
+                  bottom: Dimensions.height30),
               decoration: BoxDecoration(boxShadow: const [
                 BoxShadow(
                   offset: Offset(0, 5),
@@ -312,7 +317,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   BigText(text: popularProduct.name!),
-                  const SizedBox(height: 10),
+                  SizedBox(height: Dimensions.height10),
                   Row(
                     children: [
                       Wrap(
@@ -333,7 +338,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                       SmallText(text: "comments")
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: Dimensions.height20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: const [

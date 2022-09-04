@@ -4,15 +4,18 @@ import 'package:e_commerce/features/home/domain/models/products_model.dart';
 import 'package:e_commerce/utils/all_providers.dart';
 import 'package:e_commerce/utils/app_constants.dart';
 import 'package:e_commerce/utils/colors.dart';
+import 'package:e_commerce/utils/dimensions.dart';
 
 import 'package:e_commerce/widgets/app_icon.dart';
 import 'package:e_commerce/widgets/expandable_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../widgets/big_text.dart';
 
 class RecommendedFoodDetail extends ConsumerWidget {
+  static const String routeName = "/recommended-food-detail";
   final int index;
   const RecommendedFoodDetail({Key? key, required this.index})
       : super(key: key);
@@ -32,52 +35,56 @@ class RecommendedFoodDetail extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GestureDetector(
-                        onTap: () => Navigator.pop(context),
+                        onTap: () => context.pop(),
                         child: const AppIcon(icon: Icons.clear)),
-                    Stack(
-                      children: [
-                        const AppIcon(icon: Icons.shopping_cart_outlined),
-                        ref.watch(controllerPopularProduct).totalItems >= 1
-                            ? Positioned(
-                                right: 0,
-                                top: 0,
-                                child: GestureDetector(
-                                  onTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const CartPage())),
-                                  child: const AppIcon(
+                    GestureDetector(
+                      onTap: () {
+                        if (ref.watch(controllerPopularProduct).totalItems >=
+                            1) {
+                          context.pushNamed(CartPage.routeName);
+                        }
+                      },
+                      child: Stack(
+                        children: [
+                          const AppIcon(icon: Icons.shopping_cart_outlined),
+                          ref.watch(controllerPopularProduct).totalItems >= 1
+                              ? const Positioned(
+                                  right: 0,
+                                  top: 0,
+                                  child: AppIcon(
                                     icon: Icons.circle,
                                     size: 20,
                                     iconColor: Colors.transparent,
                                     backgroundColor: AppColors.mainColor,
                                   ),
-                                ),
-                              )
-                            : const SizedBox(),
-                        ref.watch(controllerPopularProduct).totalItems >= 1
-                            ? Positioned(
-                                right: 5,
-                                top: 3,
-                                child: BigText(
-                                  text: ref
-                                      .watch(controllerPopularProduct)
-                                      .totalItems
-                                      .toString(),
-                                  size: 12,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : const SizedBox()
-                      ],
+                                )
+                              : const SizedBox(),
+                          ref.watch(controllerPopularProduct).totalItems >= 1
+                              ? Positioned(
+                                  right: 5,
+                                  top: 3,
+                                  child: BigText(
+                                    text: ref
+                                        .watch(controllerPopularProduct)
+                                        .totalItems
+                                        .toString(),
+                                    size: 12,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : const SizedBox()
+                        ],
+                      ),
                     )
                   ]),
               pinned: true,
               bottom: PreferredSize(
                 child: Container(
                   alignment: Alignment.center,
-                  child: BigText(text: product.name!),
+                  child: BigText(
+                    text: product.name!,
+                    size: Dimensions.font26,
+                  ),
                   width: double.infinity,
                   decoration: const BoxDecoration(
                     color: Colors.white,
@@ -111,7 +118,8 @@ class RecommendedFoodDetail extends ConsumerWidget {
                 children: [
                   Container(
                     child: ExpandableTextWidget(text: product.description!),
-                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    margin:
+                        EdgeInsets.symmetric(horizontal: Dimensions.width20),
                   )
                 ],
               ),
@@ -122,7 +130,9 @@ class RecommendedFoodDetail extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+              padding: EdgeInsets.symmetric(
+                  horizontal: Dimensions.width20 * 2.5,
+                  vertical: Dimensions.height10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -141,6 +151,7 @@ class RecommendedFoodDetail extends ConsumerWidget {
                     text:
                         "\$${product.price}  X  ${ref.watch(controllerPopularProduct).inCartItems} ",
                     color: AppColors.mainBlackColor,
+                    size: Dimensions.font26,
                   ),
                   GestureDetector(
                     onTap: () {
@@ -190,7 +201,7 @@ class RecommendedFoodDetail extends ConsumerWidget {
                       ref.read(controllerPopularProduct).addItem(product);
                     },
                     child: Container(
-                      padding: const EdgeInsets.all(20),
+                      padding: EdgeInsets.all(Dimensions.height20),
                       child: BigText(
                         text: "\$ ${product.price!} | Add to cart",
                         color: Colors.white,

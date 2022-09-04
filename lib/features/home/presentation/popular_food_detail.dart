@@ -4,15 +4,18 @@ import 'package:e_commerce/features/home/domain/models/products_model.dart';
 import 'package:e_commerce/utils/all_providers.dart';
 import 'package:e_commerce/utils/app_constants.dart';
 import 'package:e_commerce/utils/colors.dart';
+import 'package:e_commerce/utils/dimensions.dart';
 import 'package:e_commerce/widgets/app_column.dart';
 import 'package:e_commerce/widgets/app_icon.dart';
 import 'package:e_commerce/widgets/big_text.dart';
 import 'package:e_commerce/widgets/expandable_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class DetailPage extends ConsumerWidget {
   int index;
+  static const String routeName = "/popular-food-detail";
   DetailPage({Key? key, required this.index}) : super(key: key);
 
   @override
@@ -30,7 +33,7 @@ class DetailPage extends ConsumerWidget {
               right: 0,
               child: SizedBox(
                 width: double.infinity,
-                height: 350,
+                height: Dimensions.popularFoodImgSize,
                 child: CachedNetworkImage(
                   fit: BoxFit.cover,
                   imageUrl: AppConstants.BASE_URL +
@@ -46,53 +49,53 @@ class DetailPage extends ConsumerWidget {
             ),
             Positioned(
               top: 25,
-              left: 15,
-              right: 15,
+              left: Dimensions.width20,
+              right: Dimensions.width20,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
                       onTap: () {
-                        Navigator.pop(context);
+                        context.pop();
                       },
                       child: const AppIcon(icon: Icons.arrow_back_ios)),
-                  Stack(
-                    children: [
-                      const AppIcon(icon: Icons.shopping_cart_outlined),
-                      ref.watch(controllerPopularProduct).totalItems >= 1
-                          ? Positioned(
-                              right: 0,
-                              top: 0,
-                              child: GestureDetector(
-                                onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const CartPage())),
-                                child: const AppIcon(
+                  GestureDetector(
+                    onTap: () {
+                      if (ref.watch(controllerPopularProduct).totalItems >= 1) {
+                        context.pushNamed(CartPage.routeName);
+                      }
+                    },
+                    child: Stack(
+                      children: [
+                        const AppIcon(icon: Icons.shopping_cart_outlined),
+                        ref.watch(controllerPopularProduct).totalItems >= 1
+                            ? const Positioned(
+                                right: 0,
+                                top: 0,
+                                child: AppIcon(
                                   icon: Icons.circle,
                                   size: 20,
                                   iconColor: Colors.transparent,
                                   backgroundColor: AppColors.mainColor,
                                 ),
-                              ),
-                            )
-                          : const SizedBox(),
-                      ref.watch(controllerPopularProduct).totalItems >= 1
-                          ? Positioned(
-                              right: 5,
-                              top: 3,
-                              child: BigText(
-                                text: ref
-                                    .watch(controllerPopularProduct)
-                                    .totalItems
-                                    .toString(),
-                                size: 12,
-                                color: Colors.white,
-                              ),
-                            )
-                          : const SizedBox()
-                    ],
+                              )
+                            : const SizedBox(),
+                        ref.watch(controllerPopularProduct).totalItems >= 1
+                            ? Positioned(
+                                right: 5,
+                                top: 3,
+                                child: BigText(
+                                  text: ref
+                                      .watch(controllerPopularProduct)
+                                      .totalItems
+                                      .toString(),
+                                  size: 12,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const SizedBox()
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -101,9 +104,12 @@ class DetailPage extends ConsumerWidget {
               left: 0,
               right: 0,
               bottom: 0,
-              top: 330,
+              top: Dimensions.popularFoodImgSize - 20,
               child: Container(
-                padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
+                padding: EdgeInsets.only(
+                    left: Dimensions.width20,
+                    top: Dimensions.width20,
+                    right: Dimensions.height20),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -114,9 +120,9 @@ class DetailPage extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AppColumn(text: product.name!),
-                    const SizedBox(height: 20),
+                    SizedBox(height: Dimensions.height20),
                     BigText(text: "Introduce"),
-                    const SizedBox(height: 20),
+                    SizedBox(height: Dimensions.height20),
                     Expanded(
                       child: SingleChildScrollView(
                         child: ExpandableTextWidget(text: product.description!),
@@ -133,7 +139,9 @@ class DetailPage extends ConsumerWidget {
             var controlProduct = ref.watch(controllerPopularProduct);
             return Container(
               height: 120,
-              padding: const EdgeInsets.only(top: 30, right: 20, left: 20),
+              padding: EdgeInsets.symmetric(
+                  vertical: Dimensions.height30,
+                  horizontal: Dimensions.width20),
               decoration: const BoxDecoration(
                 color: AppColors.buttonBackgroundColor,
                 borderRadius: BorderRadius.only(
@@ -145,7 +153,7 @@ class DetailPage extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(20),
+                    padding: EdgeInsets.all(Dimensions.height20),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: Colors.white),
@@ -158,9 +166,9 @@ class DetailPage extends ConsumerWidget {
                             },
                             child: const Icon(Icons.remove,
                                 color: AppColors.signColor)),
-                        const SizedBox(width: 10),
+                        SizedBox(width: Dimensions.width10 / 2),
                         BigText(text: controlProduct.inCartItems.toString()),
-                        const SizedBox(width: 10),
+                        SizedBox(width: Dimensions.width10 / 2),
                         GestureDetector(
                             onTap: () {
                               controlProduct.setQuantity(true, context);

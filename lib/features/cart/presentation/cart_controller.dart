@@ -8,8 +8,9 @@ class CartController extends ChangeNotifier {
 
   CartController({required this.cartRepo});
 
-  final Map<int, CartModel> _items = {};
+  Map<int, CartModel> _items = {};
   Map<int, CartModel> get items => _items;
+  List<CartModel> storageItems = [];
 
   void addItem(ProductModel product, int quantity) {
     var totalQuantity = 0;
@@ -25,7 +26,8 @@ class CartController extends ChangeNotifier {
               img: value.img,
               quantity: value.quantity! + quantity,
               isExist: true,
-              time: DateTime.now().toIso8601String());
+              product: product,
+              time: DateTime.now().toString());
         },
       );
       if (totalQuantity <= 0) {
@@ -41,10 +43,13 @@ class CartController extends ChangeNotifier {
               img: product.img,
               quantity: quantity,
               isExist: true,
-              time: DateTime.now().toIso8601String());
+              product: product,
+              time: DateTime.now().toString());
         });
       }
     }
+    cartRepo.addToCartList(getItems);
+    notifyListeners();
   }
 
   bool existInCart(ProductModel product) {
@@ -76,5 +81,52 @@ class CartController extends ChangeNotifier {
 
   List<CartModel> get getItems {
     return _items.entries.map((e) => e.value).toList();
+  }
+
+  int get totalAmount {
+    var total = 0;
+    _items.forEach((key, value) {
+      total += value.quantity! * value.price!;
+    });
+    return total;
+  }
+
+  List<CartModel> getCartData() {
+    setCart = cartRepo.getCartList();
+    return storageItems;
+  }
+
+  set setCart(List<CartModel> items) {
+    storageItems = items;
+
+    for (int i = 0; i < storageItems.length; i++) {
+      if (storageItems[i].product != null) {
+        _items.putIfAbsent(storageItems[i].product!.id!, () => storageItems[i]);
+      }
+    }
+  }
+
+  void addToHistory() {
+    cartRepo.addToCartHistoryList();
+    clear();
+  }
+
+  void clear() {
+    _items = {};
+    notifyListeners();
+  }
+
+  List<CartModel> getCartHistoryList() {
+    return cartRepo.getCartHistoryList();
+  }
+
+  set setItems(Map<int, CartModel> setItems) {
+    _items = {};
+    _items = setItems;
+  }
+
+  void addToCartList() {
+    cartRepo.addToCartList(getItems);
+    notifyListeners();
   }
 }

@@ -8,6 +8,7 @@ import 'package:e_commerce/features/home/presentation/popular_product_controller
 import 'package:e_commerce/features/home/presentation/recommended_product_controller.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../features/home/data/repository/popular_product_repo.dart';
 
@@ -39,5 +40,9 @@ final popularProductRepoProvider = Provider<PopularProductRepo>((ref) {
 });
 
 final cartRepoProvider = Provider<CartRepo>((ref) {
-  return CartRepo();
+  final sharedPreferences = ref.watch(sharedProvider);
+  return CartRepo(sharedPreferences: sharedPreferences);
 });
+//Shared Preferences
+final sharedProvider =
+    Provider<SharedPreferences>((ref) => throw UnimplementedError());

@@ -1,3 +1,4 @@
+import 'package:e_commerce/utils/dimensions.dart';
 import 'package:e_commerce/widgets/icon_and_text_widget.dart';
 import 'package:e_commerce/widgets/small_text.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,10 @@ class AppColumn extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        BigText(text: text),
+        BigText(
+          text: text,
+          size: Dimensions.font26,
+        ),
         const SizedBox(height: 10),
         Row(
           children: [

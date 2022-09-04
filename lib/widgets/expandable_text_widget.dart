@@ -1,4 +1,5 @@
 import 'package:e_commerce/utils/colors.dart';
+import 'package:e_commerce/utils/dimensions.dart';
 import 'package:e_commerce/widgets/small_text.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,7 @@ class _ExpandableTextWidgetState extends State<ExpandableTextWidget> {
   late String secondHalf;
 
   bool hiddenText = true;
-  double textHeight = 152;
+  double textHeight = Dimensions.screenHeight! / 5.63;
   @override
   void initState() {
     super.initState();
@@ -32,10 +33,14 @@ class _ExpandableTextWidgetState extends State<ExpandableTextWidget> {
   @override
   Widget build(BuildContext context) {
     return secondHalf.isEmpty
-        ? SmallText(text: firstHalf)
+        ? SmallText(
+            text: firstHalf,
+            size: Dimensions.font16,
+          )
         : Column(
             children: [
               SmallText(
+                size: Dimensions.font16,
                 height: 1.8,
                 text: hiddenText
                     ? (firstHalf + ". . .")
@@ -50,7 +55,7 @@ class _ExpandableTextWidgetState extends State<ExpandableTextWidget> {
                 child: Row(
                   children: [
                     SmallText(
-                      text: "Show more",
+                      text: hiddenText ? "Show more" : "Show less",
                       color: AppColors.mainColor,
                     ),
                     Icon(
